@@ -20,7 +20,7 @@ export default function LoadingScreen({ onComplete }) {
   // Progressive letter shuffle effect resolving into 'MILAN RAJ'
   useEffect(() => {
     let iteration = 0;
-    const totalIterations = 36;
+    const totalIterations = 52; // Synced with the slower ~6.5s progress
 
     const shuffleInterval = setInterval(() => {
       iteration++;
@@ -40,31 +40,32 @@ export default function LoadingScreen({ onComplete }) {
         setShuffledName(TARGET_NAME);
         clearInterval(shuffleInterval);
       }
-    }, 90);
+    }, 120);
 
     return () => clearInterval(shuffleInterval);
   }, []);
 
   useEffect(() => {
-    // Slower, smooth progression (~4.4 seconds total)
+    // Graceful, steady progression from 0 to 100 over ~6.8 seconds
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => onComplete?.(), 700);
+          setTimeout(() => onComplete?.(), 900);
           return 100;
         }
-        const step = Math.floor(Math.random() * 3) + 2; // 2-4% every 85ms
+        // Small, steady steps (1-2%) so counting up is clearly visible
+        const step = Math.random() > 0.4 ? 1 : 2;
         const next = Math.min(prev + step, 100);
 
-        if (next < 30) setPhaseIdx(0);
-        else if (next < 65) setPhaseIdx(1);
-        else if (next < 95) setPhaseIdx(2);
+        if (next < 28) setPhaseIdx(0);
+        else if (next < 60) setPhaseIdx(1);
+        else if (next < 90) setPhaseIdx(2);
         else setPhaseIdx(3);
 
         return next;
       });
-    }, 85);
+    }, 68);
 
     return () => clearInterval(interval);
   }, [onComplete]);
