@@ -18,22 +18,62 @@ export default function ContactSection() {
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorNotice, setErrorNotice] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrorNotice('');
 
-    // Simulate sending with high-polish feedback & celebratory confetti
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.7 },
-        colors: ['#a855f7', '#38bdf8', '#ec4899', '#ffffff']
+    try {
+      // Send directly to milanraj5942@gmail.com via secure FormSubmit AJAX
+      const response = await fetch('https://formsubmit.co/ajax/milanraj5942@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _subject: `[Portfolio Inquiry] ${formData.subject || 'New Contact Submission'}`,
+          message: formData.message,
+          _template: 'table'
+        })
       });
-    }, 600);
+
+      const result = await response.json();
+
+      if (response.ok && (result.success === 'true' || result.success === true || result.message)) {
+        setSubmitted(true);
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.7 },
+          colors: ['#a855f7', '#38bdf8', '#ec4899', '#ffffff']
+        });
+      } else {
+        // Fallback: trigger user's default email client pre-filled
+        const mailtoLink = `mailto:milanraj5942@gmail.com?subject=${encodeURIComponent(
+          formData.subject || 'Portfolio Inquiry'
+        )}&body=${encodeURIComponent(
+          `From: ${formData.name} (${formData.email})\n\nMessage:\n${formData.message}`
+        )}`;
+        window.location.href = mailtoLink;
+        setSubmitted(true);
+      }
+    } catch (err) {
+      // In case of network/offline issues, open mail client fallback
+      const mailtoLink = `mailto:milanraj5942@gmail.com?subject=${encodeURIComponent(
+        formData.subject || 'Portfolio Inquiry'
+      )}&body=${encodeURIComponent(
+        `From: ${formData.name} (${formData.email})\n\nMessage:\n${formData.message}`
+      )}`;
+      window.location.href = mailtoLink;
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

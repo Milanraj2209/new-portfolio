@@ -9,13 +9,13 @@ export const portfolioData = {
     bioHeading: 'WHO AM I?',
     bio: "I am Milan Raj, a technology enthusiast passionate about artificial intelligence, web development, automation, and digital innovation. I enjoy developing intelligent solutions and creating digital experiences that solve real-world problems.",
     extendedBio: "With a builder mindset and an eye for high-polish interactivity, I bridge cutting-edge AI models, computer vision systems, and robust full-stack web applications into seamless, production-ready experiences.",
-    email: 'milanraj.dev@example.com', // Replace with your verified email
+    email: 'milanraj5942@gmail.com',
     location: 'Phagwara, Punjab, India',
     resumeUrl: '#contact', // Add resume PDF path e.g. '/resume.pdf'
     socials: {
-      github: 'https://github.com/milanraj',
+      github: 'https://github.com/Milanraj2209',
       linkedin: 'https://www.linkedin.com/in/milanraj',
-      email: 'mailto:milanraj.dev@example.com'
+      email: 'mailto:milanraj5942@gmail.com'
     },
     metrics: [
       { label: 'Core Projects Shipped', value: '10+' },
