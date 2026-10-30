@@ -510,100 +510,11 @@ body {
 .scene-wrap {
   position: absolute;
   inset: 0;
-  z-index: 2;
-  pointer-events: auto;
-  user-select: none;
-}
-.scene-wrap.grabbable {
-  cursor: grab;
-}
-.scene-wrap.grabbing {
-  cursor: grabbing;
+  z-index: 1;
+  pointer-events: none;
 }
 .scene-wrap canvas {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-}
-
-/* Floating 360° Interaction Controls */
-.scene-360-controls {
-  position: absolute;
-  bottom: 85px;
-  right: 60px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(14, 13, 24, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  padding: 8px 14px;
-  border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(168, 85, 247, 0.1);
   pointer-events: auto;
-  transition: all 0.3s ease;
-}
-.scene-360-controls:hover {
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
-}
-.btn-360 {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #f1f5f9;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-360:hover {
-  background: rgba(168, 85, 247, 0.2);
-  border-color: #c084fc;
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-.btn-360.active {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
-  border-color: #38bdf8;
-  color: #38bdf8;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
-}
-.btn-360 .dot-radar {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
-  animation: pulse 1.4s infinite;
-}
-.hint-360 {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 1.2px;
-  color: #94a3b8;
-  padding-left: 6px;
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
-}
-@media (max-width: 768px) {
-  .scene-360-controls {
-    bottom: 25px;
-    right: 50%;
-    transform: translateX(50%);
-    width: max-content;
-    padding: 6px 12px;
-  }
-  .hint-360 {
-    display: none;
-  }
 }
 
 .hero-grain {

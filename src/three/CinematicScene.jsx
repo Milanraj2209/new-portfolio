@@ -114,84 +114,20 @@ function CameraController({ mousePosition }) {
 
 export default function CinematicScene() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [dragDeltaX, setDragDeltaX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [autoRotate, setAutoRotate] = useState(false);
-  const lastPointerX = useRef(0);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = -(e.clientY / window.innerHeight) * 2 + 1;
       setMousePosition({ x, y });
-
-      if (isDragging) {
-        const delta = (e.clientX - lastPointerX.current) * 0.012;
-        lastPointerX.current = e.clientX;
-        setDragDeltaX(delta);
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isDragging]);
-
-  // Touch drag support for mobile
-  useEffect(() => {
-    const handleTouchMove = (e) => {
-      if (!isDragging || !e.touches[0]) return;
-      const clientX = e.touches[0].clientX;
-      const delta = (clientX - lastPointerX.current) * 0.012;
-      lastPointerX.current = clientX;
-      setDragDeltaX(delta);
-    };
-    const handleTouchEnd = () => setIsDragging(false);
-
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd);
-    return () => {
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [isDragging]);
-
-  // Continuous auto-rotate loop when toggled on
-  useEffect(() => {
-    if (!autoRotate) return;
-    const interval = setInterval(() => {
-      setDragDeltaX(0.02);
-    }, 20);
-    return () => clearInterval(interval);
-  }, [autoRotate]);
-
-  const onPointerDown = (e) => {
-    setIsDragging(true);
-    lastPointerX.current = e.clientX || (e.touches && e.touches[0]?.clientX) || 0;
-  };
-
-  const handleSpin360 = () => {
-    // Add a full 2*PI spin impulse
-    setDragDeltaX(Math.PI * 2);
-  };
-
-  const handleToggleAutoRotate = () => {
-    setAutoRotate((prev) => !prev);
-  };
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   return (
-    <div
-      className={`scene-wrap ${isDragging ? 'grabbing' : 'grabbable'}`}
-      onMouseDown={onPointerDown}
-      onTouchStart={onPointerDown}
-    >
+    <div className="scene-wrap" aria-hidden="true">
       <Canvas
         camera={{ position: [0, 0.2, 5.2], fov: 38 }}
         dpr={[1, 1.75]}
@@ -239,34 +175,12 @@ export default function CinematicScene() {
           {/* Orbiting 3D Interactive Tech Elements */}
           <FloatingTechOrbs />
 
-          {/* Floating Character Container with 360 Drag Rotation */}
+          {/* Floating Character Container */}
           <Float speed={1.3} rotationIntensity={0.03} floatIntensity={0.16}>
-            <CharacterModel
-              mousePosition={mousePosition}
-              isDragging360={isDragging}
-              dragDeltaX={dragDeltaX}
-            />
+            <CharacterModel mousePosition={mousePosition} />
           </Float>
         </Suspense>
       </Canvas>
-
-      {/* Floating 360° Interaction Controls */}
-      <div className="scene-360-controls" onClick={(e) => e.stopPropagation()}>
-        <button
-          className={`btn-360 ${autoRotate ? 'active' : ''}`}
-          onClick={handleToggleAutoRotate}
-          title="Toggle 360° Continuous Orbit"
-        >
-          <span className="dot-radar" />
-          <span>{autoRotate ? 'ORBITING 360°' : '360° AUTO-ORBIT'}</span>
-        </button>
-        <button className="btn-360" onClick={handleSpin360} title="Quick 360° Spin">
-          <span>🔄 SPIN 360°</span>
-        </button>
-        <div className="hint-360">
-          <span>↔ DRAG ANYWHERE TO ROTATE 360°</span>
-        </div>
-      </div>
     </div>
   );
 }
